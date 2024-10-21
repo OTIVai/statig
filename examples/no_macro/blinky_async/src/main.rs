@@ -44,7 +44,14 @@ impl IntoStateMachine for Blinky {
     /// The initial state of the state machine.
     const INITIAL: State = State::LedOn;
 
-    const ON_TRANSITION: fn(&mut Self, &Self::State, &Self::State) = Blinky::on_transition;
+}
+
+impl IntoStateMachineExt for Blinky {
+    
+    async fn on_transition(&mut self, from_state: &State, to_state: &State) {
+        println!("Transitioned to {:?}", to_state);
+    }
+
 }
 
 // Implement the `statig::State` trait for the state enum.
@@ -104,9 +111,6 @@ impl Blinky {
         }
     }
 
-    fn on_transition(&mut self, from_state: &State, to_state: &State) {
-        println!("Transitioned to {:?}", to_state);
-    }
 }
 
 #[tokio::main]
