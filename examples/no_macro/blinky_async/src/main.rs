@@ -14,6 +14,7 @@ pub enum Event {
 
 // The enum representing all states of the state machine. These are
 // the states you can actually transition to.
+#[derive(Debug)]
 pub enum State {
     LedOn,
     LedOff,
@@ -42,6 +43,8 @@ impl IntoStateMachine for Blinky {
 
     /// The initial state of the state machine.
     const INITIAL: State = State::LedOn;
+
+    const ON_TRANSITION: fn(&mut Self, &Self::State, &Self::State) = Blinky::on_transition;
 }
 
 // Implement the `statig::State` trait for the state enum.
@@ -99,6 +102,10 @@ impl Blinky {
             Event::ButtonPressed => Transition(State::LedOn),
             _ => Super,
         }
+    }
+
+    fn on_transition(&mut self, from_state: &State, to_state: &State) {
+        println!("Transitioned to {:?}", to_state);
     }
 }
 
